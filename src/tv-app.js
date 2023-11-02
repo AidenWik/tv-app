@@ -13,6 +13,7 @@ export class TvApp extends LitElement {
     this.listings = [];
   }
   // convention I enjoy using to define the tag's name
+
   static get tag() {
     return 'tv-app';
   }
@@ -33,6 +34,13 @@ export class TvApp extends LitElement {
         margin: 16px;
         padding: 16px;
       }
+      .course-topics {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+        align-items: left;
+      }
       `
     ];
   }
@@ -40,10 +48,11 @@ export class TvApp extends LitElement {
   render() {
     return html`
       <h2>${this.name}</h2>
+      <div class = "course-topics"></div>
       ${
         this.listings.map(
           (item) => html`
-            <tv-channel 
+            <tv-channel
               title="${item.title}"
               presenter="${item.metadata.author}"
               @click="${this.itemClick}"
