@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Components Functionality</title>
+    <!-- Include CSS here or link to an external stylesheet -->
+</head>
+<body>
+    <h1>6. Adding Functionality</h1>
+
+    <section>
+        <h2>Property Bindings</h2>
+        <p>Update the custom element view when the rating property changes by adding a setter and getter. This enables the view to update when the property is set programmatically.</p>
+        <pre><code>class RatingElement extends HTMLElement {
+  constructor() {
+    super();
+    this._rating = 0;
+  }
+  set rating(value) {
+    this._rating = value;
+    // Update logic
+  }
+  get rating() {
+    return this._rating;
+  }
+}
+customElements.define('rating-element', RatingElement);
+        </code></pre>
+
+        <h2>Attribute Bindings</h2>
+        <p>Make the element update the view when the attribute changes, similar to how native HTML elements work:</p>
+        <pre><code>static get observedAttributes() {
+  return ['rating'];
+}
+attributeChangedCallback(attributeName, oldValue, newValue) {
+  // Update logic
+}
+        </code></pre>
+        <p>Set attributes declaratively in the DOM and observe the changes.</p>
+
+        <h2>Button Functionality</h2>
+        <p>Add functionality to the buttons and provide visual feedback:</p>
+        <pre><code>constructor() {
+  this._vote = null;
+  // Event binding
+}
+connectedCallback() {
+  // Add event listeners
+}
+disconnectedCallback() {
+  // Remove event listeners
+}
+_onUpClick() {
+  this.vote = 'up';
+}
+_onDownClick() {
+  this.vote = 'down';
+}
+        </code></pre>
+        <p>Implement logic for upvote and downvote, along with reflecting property changes.</p>
+
+        <h3>Conclusion</h3>
+        <p>You now have a fully-featured Web Component. The next step is exploring how to simplify and enhance such components with tools like Google's Lit project.</p>
+    </section>
+
+    <!-- Include any JavaScript at the end of the body -->
+</body>
+</html>

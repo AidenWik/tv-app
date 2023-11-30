@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shadow DOM Tutorial</title>
+    <!-- Include CSS here or link to an external stylesheet -->
+</head>
+<body>
+    <h1>4. Shadow DOM</h1>
+
+    <section>
+        <h2>Why Shadow DOM?</h2>
+        <p>In previous steps, styles defined for custom elements could unintentionally affect other elements on the page and vice versa. This is where Shadow DOM provides encapsulation to prevent style and DOM leakage.</p>
+
+        <h3>Attaching a Shadow Root</h3>
+        <p>Shadow DOM allows you to attach encapsulated DOM and styles to an element. This prevents styles from leaking out and external styles from affecting your component.</p>
+        <pre><code>class RatingElement extends HTMLElement {
+ constructor() {
+   super();
+   this.rating = 0;
+ }
+ connectedCallback() {
+   const shadowRoot = this.attachShadow({mode: 'open'});
+   shadowRoot.innerHTML = \`...HTML and Styles...\`;
+ }
+}
+customElements.define('rating-element', RatingElement);
+        </code></pre>
+        <p>Shadow DOM ensures that styles and DOM inside the component are encapsulated.</p>
+
+        <h3>Light DOM</h3>
+        <p>Direct children of a custom element are called Light DOM. However, they are not rendered directly when using Shadow DOM. Instead, you can use <code>&lt;slot&gt;</code> elements to project Light DOM into Shadow DOM.</p>
+        <p>Example of Light DOM usage:</p>
+        <pre><code>&lt;rating-element&gt;
+ &lt;div&gt;This is the light DOM!&lt;/div&gt;
+&lt;/rating-element&gt;
+        </code></pre>
+        <p>This demonstrates how Shadow DOM provides DOM encapsulation and style scoping.</p>
+    </section>
+
+    <!-- Include any JavaScript at the end of the body -->
+</body>
+</html>

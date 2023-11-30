@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Elements Tutorial</title>
+    <!-- You can include CSS here or link to an external stylesheet -->
+</head>
+<body>
+    <h1>3. Define A Custom Element</h1>
+
+    <section>
+        <h2>Custom Elements</h2>
+        <p>Web Components are a collection of 4 native web APIs: ES Modules, Custom Elements, Shadow DOM, and HTML Templates. You've already used ES modules, which allow you to create JavaScript modules with imports and exports loaded with <code>&lt;script type="module"&gt;</code>.</p>
+
+        <h3>Defining a Custom Element</h3>
+        <p>The Custom Elements specification lets users define their own HTML elements using JavaScript. The names must contain a hyphen (-) to differentiate them from native browser elements.</p>
+
+        <p>Example of defining a custom element:</p>
+        <pre><code>class RatingElement extends HTMLElement {}
+customElements.define('rating-element', RatingElement);
+        </code></pre>
+
+        <p>Place a <code>&lt;rating-element&gt;</code> in the document body to see how it renders.</p>
+
+        <h3>Custom Element Lifecycle</h3>
+        <p>Custom Elements come with a set of lifecycle hooks: constructor, connectedCallback, disconnectedCallback, attributeChangedCallback, and adoptedCallback.</p>
+
+        <h3>Render DOM</h3>
+        <p>Set the element's content when it gets attached to the DOM in the connectedCallback method:</p>
+        <pre><code>class RatingElement extends HTMLElement {
+ constructor() {
+   super();
+   this.rating = 0;
+ }
+ connectedCallback() {
+   this.innerHTML = \`...HTML and SVG for thumbs up and down...\`;
+ }
+}
+customElements.define('rating-element', RatingElement);
+        </code></pre>
+        <p>This adds DOM children to <code>&lt;rating-element&gt;</code> to display the current rating with thumbs up and thumbs down buttons.</p>
+    </section>
+
+    <!-- Include any JavaScript at the end of the body -->
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lit Codelab Tutorial</title>
+    <!-- You can include CSS here or link to an external stylesheet -->
+</head>
+<body>
+
+
+
+        <h1>2. Getting Set Up & Exploring the Playground</h1>
+        <section>
+        <h3>Accessing the Code</h3>
+        <p>Throughout the codelab, there will be links to the Lit playground. The playground is a code sandbox that runs completely in your browser, capable of compiling and running TypeScript and JavaScript files, and resolving imports to node modules.</p>
+
+        <p>Example:</p>
+        <pre><code>// before
+import './my-file.js';
+import 'lit';
+
+// after
+import './my-file.js';
+import 'https://unpkg.com/lit?module';
+        </code></pre>
+
+        <p>You can complete the entire tutorial in the Lit playground, using these checkpoints as starting points.</p>
+
+        <h3>Exploring the Lit Playground UI</h3>
+        <p>The file selector tab bar is labeled Section 1, the code editing section as Section 2, the output preview as Section 3, and the preview reload button as Section 4.</p>
+
+        <ul>
+            <li>File selector: Note the plus button...</li>
+            <li>File editor.</li>
+            <li>Code preview.</li>
+            <li>Reload button.</li>
+            <li>Download button.</li>
+        </ul>
+
+        <p>Use ctrl + s (cmd + s for Mac) to save your progress as a URL, allowing you to reload the page without losing progress or share your code with others.</p>
+
+        <h3>VS Code Setup (Advanced)</h3>
+        <p>If you're running this codelab entirely in the browser, you can skip this step. The benefits of using this VS Code setup include template type checking and template intellisense & autocompletion.</p>
+
+        <p>To get started:</p>
+        <ol>
+            <li>Press the download button.</li>
+            <li>Extract the tar file's contents into a directory.</li>
+            <li>Install a dev server that can resolve bare module specifiers (e.g., @web/dev-server).</li>
+            <li>Run the dev server and open your browser.</li>
+            <li>For the example package.json, use <code>npm run serve</code>.</li>
+        </ol>
+    </section>
+
+    <!-- Include any JavaScript at the end of the body -->
+</body>
+</html>

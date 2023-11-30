@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Using Lit-html in Web Components</title>
+    <!-- Include CSS here or link to an external stylesheet -->
+</head>
+<body>
+    <h1>7. Lit-html</h1>
+
+    <section>
+        <h2>Why lit-html</h2>
+        <p>lit-html provides a way to write HTML templates in JavaScript, offering efficient rendering and re-rendering. Unlike imperative approaches, it uses declarative patterns and runs natively in the browser.</p>
+
+        <h3>Using Lit HTML</h3>
+        <p>Migrate the native Web Component to use Lit templates. Lit templates use tagged template literals for fast rendering and some sanitization for security:</p>
+        <pre><code>import {render, html} from 'lit';
+
+class RatingElement extends HTMLElement {
+  // ... existing properties and methods ...
+
+  render() {
+    const template = html`
+      &lt;style&gt;...&lt;/style&gt;
+      &lt;button class="thumb_down"&gt;...&lt;/button&gt;
+      &lt;span class="rating"&gt;${this.rating}&lt;/span&gt;
+      &lt;button class="thumb_up"&gt;...&lt;/button&gt;
+    `;
+    render(template, this.shadowRoot);
+  }
+}
+customElements.define('rating-element', RatingElement);
+        </code></pre>
+
+        <h3>Migrating to Declarative Syntax</h3>
+        <p>Refactor the code to use the lit-html's declarative syntax for rendering and event handling:</p>
+        <pre><code>&lt;button
+    class="thumb_down"
+    @click=${() => {this.vote = 'down'}}&gt;
+...
+&lt;button
+    class="thumb_up"
+    @click=${() => {this.vote = 'up'}}&gt;
+        </code></pre>
+        <p>Event listeners are added directly in the template, simplifying the component code.</p>
+
+        <h3>Property and Attribute Bindings</h3>
+        <p>Update the property setters to trigger re-rendering:</p>
+        <pre><code>set rating(value) {
+  this._rating = value;
+  this.render();
+}
+
+set vote(newValue) {
+  // ... logic for updating vote ...
+  this.render();
+}
+        </code></pre>
+        <p>The render method is called whenever properties or attributes change, ensuring the DOM is updated accordingly.</p>
+
+        <h3>Conclusion</h3>
+        <p>With these changes, the rating component is now more declarative and efficient. The Lit-html library simplifies the process of creating dynamic and interactive web components.</p>
+    </section>
+
+    <!-- Include any JavaScript at the end of the body -->
+</body>
+</html>

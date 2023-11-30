@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Templates in Web Components</title>
+    <!-- Include CSS here or link to an external stylesheet -->
+</head>
+<body>
+    <h1>5. HTML Templates</h1>
+
+    <section>
+        <h2>Why Templates</h2>
+        <p>Using innerHTML with template literals without sanitization may lead to security issues like script injection. DocumentFragments have been used in the past but pose challenges with images loading and script execution at definition time, hindering reusability. The &lt;template&gt; element offers a solution with inert DOM, efficient node cloning, and reusable templating.</p>
+
+        <h3>Using Templates</h3>
+        <p>Transitioning a component to use HTML Templates enhances performance and reusability:</p>
+        <pre><code>&lt;template id="rating-element-template"&gt;
+  &lt;style&gt;
+    :host {
+      display: inline-flex;
+      align-items: center;
+    }
+    button {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+    }
+  &lt;/style&gt;
+  &lt;button class="thumb_down"&gt;...&lt;/button&gt;
+  &lt;span class="rating"&gt;&lt;/span&gt;
+  &lt;button class="thumb_up"&gt;...&lt;/button&gt;
+&lt;/template&gt;
+        </code></pre>
+        <p>This demonstrates moving the DOM content into a &lt;template&gt; tag. The element's DOM is then initialized by cloning this template's content.</p>
+
+        <h3>Custom Element Definition</h3>
+        <p>Refactor the custom element to use the template:</p>
+        <pre><code>class RatingElement extends HTMLElement {
+  constructor() {
+    super();
+    this.rating = 0;
+  }
+  connectedCallback() {
+    const shadowRoot = this.attachShadow({mode: 'open'});
+    const templateContent = document.getElementById('rating-element-template').content;
+    shadowRoot.appendChild(templateContent.cloneNode(true));
+    this.shadowRoot.querySelector('.rating').innerText = this.rating;
+  }
+}
+customElements.define('rating-element', RatingElement);
+        </code></pre>
+        <p>This approach initializes the component's DOM with the data from the template, demonstrating the use of templates in web components.</p>
+
+        <h3>Conclusion</h3>
+        <p>Congratulations, you now have a functional Web Component! The next step is to add interactive functionality to it.</p>
+    </section>
+
+    <!-- Include any JavaScript at the end of the body -->
+</body>
+</html>
