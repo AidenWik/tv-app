@@ -303,6 +303,7 @@ export class TvApp extends LitElement {
   }
 
   async itemClick(index) {
+
     this.activeIndex = index;
     const item = this.listings[index].location;
     // console.log("Active Content", item);
@@ -327,7 +328,6 @@ export class TvApp extends LitElement {
 
   firstUpdate(){
     this.activeIndex = 0;
-
   }
 
   // LitElement life cycle for when any property changes
