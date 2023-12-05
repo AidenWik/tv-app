@@ -22,6 +22,7 @@ export class TvApp extends LitElement {
     this.upperContent = "";
     this.itemClick = this.itemClick.bind(this);
     this.time = "";
+    this.farthestIndex = 0;
   }
 /*
   connectedCallback() {
@@ -39,6 +40,7 @@ export class TvApp extends LitElement {
   // LitElement convention so we update render() when values change
   static get properties() {
     return {
+      farthestIndex: { type: Number },
       name: { type: String },
       source: { type: String },
       listings: { type: Array },
@@ -317,7 +319,7 @@ export class TvApp extends LitElement {
   }
 
   async itemClick(index) {
-    if (index <= this.activeIndex + 1) {
+    if (index <= this.farthestIndex + 1) {
       this.activeIndex = index;
       const item = this.listings[index].location;
       this.time = this.listings[index].metadata.timecode;
@@ -327,14 +329,16 @@ export class TvApp extends LitElement {
         const response = await fetch(contentPath);
         const text = await response.text();
         this.activeContent = text;
+        if (index > this.farthestIndex) {
+          this.farthestIndex = index; // Update farthest index when navigating forward
+        }
         this.saveState(); // Save the state when the index changes
       } catch (err) {
         console.log("fetch failed", err);
       }
     } else {
-      // Handle click on elements other than the immediate next
-      // You can show an error message or perform any other action
       console.log("You can only click back to the immediate previous or current element.");
+      // Handle clicks beyond the farthest index clicked
     }
   }
 
