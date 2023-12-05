@@ -191,8 +191,7 @@ export class TvApp extends LitElement {
 
         </div>
         <div class="main">
-          <!-- ${this.activeContent ? unsafeHTML(this.activeContent) : html``} -->
-          <slot></slot>
+          ${this.activeContent ? unsafeHTML(this.activeContent) : html``}
         </div>
         <div class="fabs">
           <div id="previous">
@@ -220,26 +219,34 @@ export class TvApp extends LitElement {
   //   progressText.innerHTML = `${activeIndex + 1} / ${this.listings.length}`;
 
   // }
-  loadState() {
-    const storedActiveIndex = localStorage.getItem('activeIndex');
-    const storedFarthestIndex = localStorage.getItem('farthestIndex');
-    if (storedActiveIndex !== null && storedFarthestIndex !== null) {
-      this.activeIndex = parseInt(storedActiveIndex, 10);
-      this.farthestIndex = parseInt(storedFarthestIndex, 10);
-      this.loadActiveContent();
-    }
-  }
 
-  connectedCallback() {
-    super.connectedCallback();
-    this.loadData();
-    this.loadState(); // Load the stored state on page load
+loadState() {
+  const storedActiveIndex = localStorage.getItem('activeIndex');
+  const storedFarthestIndex = localStorage.getItem('farthestIndex');
+  if (storedActiveIndex !== null && storedFarthestIndex !== null) {
+    this.activeIndex = parseInt(storedActiveIndex, 10);
+    this.farthestIndex = parseInt(storedFarthestIndex, 10);
+    this.loadActiveContent();
   }
+}
 
-  saveState() {
+connectedCallback() {
+  super.connectedCallback();
+  this.loadData();
+  this.loadState(); // Load the stored state on page load
+}
+
+saveState() {
+  if (this.farthestIndex == this.listings.length-1){
+    localStorage.clear();
+    this.activeIndex = 0;
+    this.farthestIndex = this.activeIndex;
     localStorage.setItem('activeIndex', this.activeIndex);
     localStorage.setItem('farthestIndex', this.farthestIndex);
   }
+  localStorage.setItem('activeIndex', this.activeIndex);
+  localStorage.setItem('farthestIndex', this.farthestIndex);
+}
 
   async loadData() {
     // Fetch data from the source
@@ -332,7 +339,7 @@ export class TvApp extends LitElement {
       try {
         const response = await fetch(contentPath);
         const text = await response.text();
-        this.innerHTML = text;
+        this.activeContent = text;
         if (index > this.farthestIndex) {
           this.farthestIndex = index;
         }
