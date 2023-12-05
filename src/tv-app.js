@@ -191,7 +191,8 @@ export class TvApp extends LitElement {
 
         </div>
         <div class="main">
-          ${this.activeContent ? unsafeHTML(this.activeContent) : html``}
+          <!-- ${this.activeContent ? unsafeHTML(this.activeContent) : html``} -->
+          <slot></slot>
         </div>
         <div class="fabs">
           <div id="previous">
@@ -331,7 +332,7 @@ export class TvApp extends LitElement {
       try {
         const response = await fetch(contentPath);
         const text = await response.text();
-        this.activeContent = text;
+        this.innerHTML = text;
         if (index > this.farthestIndex) {
           this.farthestIndex = index;
         }
