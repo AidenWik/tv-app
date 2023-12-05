@@ -112,8 +112,14 @@ export class TvApp extends LitElement {
           margin: 19px;
           width: 81vw;
         }
+        .previous:hover {
+          filter: brightness(90%);
+        }
+        .next:hover {
+          filter: brightness(90%);
+        }
 
-        #previous > button {
+        .previous {
           border-radius: 4px;
           font-family:
             Google Sans,
@@ -137,7 +143,7 @@ export class TvApp extends LitElement {
             0 1px 5px 0 rgba(0, 0, 0, 0.12),
             0 3px 1px -2px rgba(0, 0, 0, 0.2);
         }
-        #next > button {
+        .next {
           border-radius: 4px;
           font-family:
             Google Sans,
@@ -194,11 +200,8 @@ export class TvApp extends LitElement {
           ${this.activeContent ? unsafeHTML(this.activeContent) : html``}
         </div>
         <div class="fabs">
-          <div id="previous">
-            <button @click=${() => this.prevPage()}>Back</button>
-          </div>
-          <div id="next">
-            <button @click=${() => this.nextPage()}>Next</button>
+        <button class="previous" @click="${this.prevPage}">Previous</button>
+        <button class="next" @click="${this.nextPage}">Next</button>
           </div>
         </div>
       </div>
@@ -237,15 +240,14 @@ connectedCallback() {
 }
 
 saveState() {
-  if (this.farthestIndex == this.listings.length-1){
-    localStorage.clear();
-    this.activeIndex = 0;
-    this.farthestIndex = this.activeIndex;
-    localStorage.setItem('activeIndex', this.activeIndex);
-    localStorage.setItem('farthestIndex', this.farthestIndex);
-  }
   localStorage.setItem('activeIndex', this.activeIndex);
   localStorage.setItem('farthestIndex', this.farthestIndex);
+
+  // Check if activeIndex is at the last element and clear storage if so
+  if (this.activeIndex === this.listings.length - 1) {
+    localStorage.removeItem('activeIndex');
+    localStorage.removeItem('farthestIndex');
+  }
 }
 
   async loadData() {
@@ -285,7 +287,7 @@ saveState() {
   }
 
   async nextPage() {
-    if (this.activeIndex != this.listings.length-1){
+    if (this.activeIndex != this.listings.length - 1) {
       if (this.activeIndex !== null) {
         const nextIndex = (this.activeIndex + 1) % this.listings.length;
         const item = this.listings[nextIndex].location;
@@ -295,9 +297,11 @@ saveState() {
         try {
           const response = await fetch(contentPath);
           this.activeContent = await response.text();
-          // console.log("Active Content", this.activeContent);
           this.activeIndex = nextIndex; // Update the active index after fetching content
           this.time = this.listings[nextIndex].metadata.timecode;
+
+          // Call farthestUpdate to update indexes for saving and loading data
+          this.farthestUpdate();
         } catch (err) {
           console.log("fetch failed", err);
         }
@@ -306,7 +310,7 @@ saveState() {
   }
 
   async prevPage() {
-    if (this.activeIndex != 0){
+    if (this.activeIndex != 0) {
       if (this.activeIndex !== null) {
         const prevIndex =
           this.activeIndex === 0
@@ -319,13 +323,21 @@ saveState() {
         try {
           const response = await fetch(contentPath);
           this.activeContent = await response.text();
-          // console.log("Active Content", this.activeContent);
           this.activeIndex = prevIndex; // Update the active index after fetching content
           this.time = this.listings[prevIndex].metadata.timecode;
+
+          // Call farthestUpdate to update indexes for saving and loading data
+          this.farthestUpdate();
         } catch (err) {
           console.log("fetch failed", err);
         }
       }
+    }
+  }
+  farthestUpdate() {
+    if (this.activeIndex > this.farthestIndex) {
+      this.farthestIndex = this.activeIndex;
+      this.saveState();
     }
   }
 
