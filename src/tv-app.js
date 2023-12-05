@@ -220,10 +220,12 @@ export class TvApp extends LitElement {
 
   // }
   loadState() {
-    const storedIndex = localStorage.getItem('activeIndex');
-    if (storedIndex !== null) {
-      this.activeIndex = parseInt(storedIndex, 10); // Parse the stored index
-      this.loadActiveContent(); // Load the active content for the restored index
+    const storedActiveIndex = localStorage.getItem('activeIndex');
+    const storedFarthestIndex = localStorage.getItem('farthestIndex');
+    if (storedActiveIndex !== null && storedFarthestIndex !== null) {
+      this.activeIndex = parseInt(storedActiveIndex, 10);
+      this.farthestIndex = parseInt(storedFarthestIndex, 10);
+      this.loadActiveContent();
     }
   }
 
@@ -234,7 +236,8 @@ export class TvApp extends LitElement {
   }
 
   saveState() {
-    localStorage.setItem('activeIndex', this.activeIndex); // Save activeIndex to local storage
+    localStorage.setItem('activeIndex', this.activeIndex);
+    localStorage.setItem('farthestIndex', this.farthestIndex);
   }
 
   async loadData() {
@@ -330,9 +333,9 @@ export class TvApp extends LitElement {
         const text = await response.text();
         this.activeContent = text;
         if (index > this.farthestIndex) {
-          this.farthestIndex = index; // Update farthest index when navigating forward
+          this.farthestIndex = index;
         }
-        this.saveState(); // Save the state when the index changes
+        this.saveState();
       } catch (err) {
         console.log("fetch failed", err);
       }
