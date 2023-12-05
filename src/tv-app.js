@@ -217,20 +217,22 @@ export class TvApp extends LitElement {
   //   progressText.innerHTML = `${activeIndex + 1} / ${this.listings.length}`;
 
   // }
-  connectedCallback() {
-    super.connectedCallback();
-    this.loadData(); this.loadState(); // Load the stored state on page load
-  }
-
-  saveState() {
-    localStorage.setItem('activeIndex', this.activeIndex); // Save activeIndex to local storage
-  }
-
   loadState() {
     const storedIndex = localStorage.getItem('activeIndex');
     if (storedIndex !== null) {
       this.activeIndex = parseInt(storedIndex, 10); // Parse the stored index
+      this.loadActiveContent(); // Load the active content for the restored index
     }
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.loadData();
+    this.loadState(); // Load the stored state on page load
+  }
+
+  saveState() {
+    localStorage.setItem('activeIndex', this.activeIndex); // Save activeIndex to local storage
   }
 
   async loadData() {
@@ -253,14 +255,15 @@ export class TvApp extends LitElement {
   }
 
   loadActiveContent() {
-    if (this.listings && this.listings.length > 0) {
-      const firstItem = this.listings[0];
-      const contentPath = "/assets/" + firstItem.location;
+    if (this.listings && this.listings.length > 0 && this.activeIndex >= 0 && this.activeIndex < this.listings.length) {
+      const item = this.listings[this.activeIndex].location;
+      const contentPath = "/assets/" + item;
+
       fetch(contentPath)
         .then((response) => response.text())
         .then((text) => {
           this.activeContent = text;
-          this.time = firstItem.metadata.timecode;
+          this.time = this.listings[this.activeIndex].metadata.timecode;
         })
         .catch((error) => {
           console.error('Error fetching active content:', error);
