@@ -219,7 +219,18 @@ export class TvApp extends LitElement {
   // }
   connectedCallback() {
     super.connectedCallback();
-    this.loadData();
+    this.loadData(); this.loadState(); // Load the stored state on page load
+  }
+
+  saveState() {
+    localStorage.setItem('activeIndex', this.activeIndex); // Save activeIndex to local storage
+  }
+
+  loadState() {
+    const storedIndex = localStorage.getItem('activeIndex');
+    if (storedIndex !== null) {
+      this.activeIndex = parseInt(storedIndex, 10); // Parse the stored index
+    }
   }
 
   async loadData() {
@@ -303,28 +314,27 @@ export class TvApp extends LitElement {
   }
 
   async itemClick(index) {
+    if (index <= this.activeIndex + 1) {
+      this.activeIndex = index;
+      const item = this.listings[index].location;
+      this.time = this.listings[index].metadata.timecode;
+      const contentPath = "/assets/" + item;
 
-    this.activeIndex = index;
-    const item = this.listings[index].location;
-    // console.log("Active Content", item);
-    this.time = this.listings[index].metadata.timecode;
-    console.log("Time", this.time);
-
-    const contentPath = "/assets/" + item;
-    // console.log("Content Path", contentPath);
-
-    try {
-      const response = await fetch(contentPath);
-      const text = await response.text();
-      this.activeContent = text;
-      // console.log("Active Content", this.activeContent);
-    } catch (err) {
-      console.log("fetch failed", err);
+      try {
+        const response = await fetch(contentPath);
+        const text = await response.text();
+        this.activeContent = text;
+        this.saveState(); // Save the state when the index changes
+      } catch (err) {
+        console.log("fetch failed", err);
+      }
+    } else {
+      // Handle click on elements other than the immediate next
+      // You can show an error message or perform any other action
+      console.log("You can only click back to the immediate previous or current element.");
     }
-
-    // const dialog = this.shadowRoot.querySelector('.dialog');
-    // dialog.show();
   }
+
 
   firstUpdate(){
     this.activeIndex = 0;
